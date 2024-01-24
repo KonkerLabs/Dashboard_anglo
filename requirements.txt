@@ -21,5 +21,5 @@ tenacity==8.2.3
 plotly.express==0.4.1
 authlib
 flask_dance
-Flask-OAuthlib==0.9.7
+Flask-OAuthlib==0.9.6
 Flask-Session==0.4.0
