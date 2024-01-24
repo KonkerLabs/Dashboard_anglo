@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Página Inicial</title>
+    <style>
+        body {
+            background-color: #90ee90;
+            font-family: "Times New Roman", Times, serif; font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            text-align: center;
+            padding: 14px;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        img {
+            height: 60px;
+            width: auto;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+        }
+
+        button {
+            background-color: #90ee90;
+            color: #000000;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #9f9f9f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Inclua a imagem usando a tag img com um caminho relativo -->
+        <img src="{{ url_for('static', filename='image/konker.png') }}" alt="Logo">
+
+        <!-- Substitua o título pelo seu HTML especificado -->
+        <h1>Para acessar novamente a Dashboard, clique no botão abaixo</h1>
+        <h4 id='user-full-name' style='"Times New Roman", Times, serif: 12px;'>{{ user }}</h4>
+
+        <!-- Formulário de login com um botão de envio -->
+        <form action="{{ url_for('index') }}" method="get">
+    <button type="submit" onclick="redirectToHomepage()">Retornar à página inicial</button>
+        </form>
+
+        <!-- Script para redirecionar para a página inicial ao clicar no botão -->
+        <script>
+            function redirectToHomepage() {
+                window.location.href = "{{ url_for('index') }}";
+            }
+        </script>
+    </div>
+</body>
+</html>
