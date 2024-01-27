@@ -60,11 +60,11 @@ owm = pyowm.OWM('fa47fceaf9e211df22cedbb5c4f2b456')  # Substitua pela sua chave 
 mgr = owm.weather_manager()
 
 # Dicionário para armazenar dados
-data_dict = {'Measurement': [], 'Mass (1000 x kg)': [], 'Temperature (°C)': [], 'Current Time': []}
+data_dict = {'Measurement': [1, 2, 3, 4, 5, 6], 'Mass (1000 x kg)': [12.32, 11.40, 15.10, 9.76, 10.97, 8.34], 'Temperature (°C)': [28.57, 28.57, 28.51, 28.51, 28.46, 28.48], 'Current Time': ['10:30:00', '10:31:00', '10:32:00', '10:33:00', '10:34:00', '10:35:00']}
 
 # Sample data
-dt = {"Measurement": [],
-      "Mass (1000 x kg)": []}
+dt = {"Measurement": [1, 2, 3, 4, 5, 6],
+      "Mass (1000 x kg)": [12, 11, 15, 9, 10, 8]}
 
 df = pd.DataFrame(dt)
 fig = px.line(df, x="Measurement", y="Mass (1000 x kg)", markers=True, template='plotly_dark',
@@ -150,12 +150,12 @@ dash_app.layout = html.Div(
             children=[
                 dcc.Interval(
                     id='interval-component',
-                    interval=30 * 1000,
+                    interval=60 * 1000,
                     n_intervals=0
                 ),
                 dcc.Interval(
                     id='table-interval-component',
-                    interval=30 * 1000,
+                    interval=60 * 1000,
                     n_intervals=0
                 ),
                 html.Div(
@@ -257,12 +257,12 @@ app.layout = html.Div(children=[
     dcc.Location(id='url', refresh=False),
     dcc.Interval(
         id='interval-component',
-        interval=30*1000,  # em milissegundos, atualiza a cada 30 segundos
+        interval=60*1000,  # em milissegundos, atualiza a cada 30 segundos
         n_intervals=0
     ),
     dcc.Interval(
         id='table-interval-component',
-        interval=30*1000,  # em milissegundos, atualiza a cada minuto
+        interval=60*1000,  # em milissegundos, atualiza a cada minuto
         n_intervals=0
     ),
     html.Div(id='page-content', style={'width': '20%', 'margin': '0', 'overflowX': 'hidden'}),])
