@@ -287,7 +287,7 @@ def do_logout():
     # Substitua YOUR_TENANT_ID pelo seu ID de Tenant do Azure AD
     azure_logout_url = (
         f"https://login.microsoftonline.com/6495f1e2-0d47-4be2-826d-bef88fc09df3/oauth2/logout"
-        f"?post_logout_redirect_uri=https://dashboard-konker-anglo.onrender.com/page_logout"
+        f"?post_logout_redirect_uri=http://dashboard-konker-anglo.onrender.com/page_logout"
     )
 
     # Redirecionar para a URL de logout do Azure AD
