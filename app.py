@@ -205,7 +205,6 @@ dash_app.layout = html.Div(
 )
 
 
-
 # Sample Dash callback for updating the DataTable and the Graph
 @dash_app.callback([Output('table-data', 'data'), Output('example-graph', 'figure')],
                    [Input('interval-component', 'n_intervals')],
@@ -272,7 +271,6 @@ app.layout = html.Div(children=[
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 # Rota de login
 @app.route('/login')
