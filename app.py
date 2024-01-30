@@ -15,6 +15,7 @@ import pyowm
 import base64
 from io import BytesIO
 import numpy as np
+import uuid
 from urllib.parse import quote
 from urllib.parse import urlparse, urlunparse
 from functools import wraps
@@ -131,7 +132,7 @@ dash_app.layout = html.Div(
                 ),
                 html.A(
                     html.Button("Logout", id="logout-button", style=button_style),
-                    href="/azure_logout",
+                    href="/do_logout",
                     style={'margin-bottom': '50px'}
                 ),
             ],
@@ -281,7 +282,23 @@ def index():
 def login():
     return azure.authorize(callback=url_for('authorized', _external=True))
 
-import uuid
+# Rota para lidar com o logout efetivo
+@app.route('/do_logout')
+def do_logout():
+    # Destruir a sessão Flask
+    session.clear()
+
+    # URL de logout do Azure AD
+    # Substitua YOUR_TENANT_ID pelo seu ID de Tenant do Azure AD
+    azure_logout_url = (
+        f"https://login.microsoftonline.com/YOUR_TENANT_ID/oauth2/logout"
+        f"?post_logout_redirect_uri=http://localhost:5000/page_logout"
+    )
+
+    # Redirecionar para a URL de logout do Azure AD
+    return redirect(azure_logout_url)
+
+
 # Rota de logout do Azure AD
 @app.route('/azure_logout')
 def azure_logout():
@@ -307,11 +324,10 @@ def azure_logout():
     return redirect(logout_url)
 
 # Add your existing route for page_logout.html
-@app.route('/pagina_logout')
+@app.route('/page_logout')
 def page_logout():
     # Add any logic or rendering for your page_logout.html page
     return render_template('page_logout.html')
-
 
 # Rota autorizada
 @app.route('/login/authorized')
@@ -345,12 +361,6 @@ def display_dashboard(value, user_full_name):
     # Render the Dash app content if authenticated
     return dash_app.index()
 
-# Rota de logout quando a aba é fechada
-@app.route('/logout_on_close', methods=['GET'])
-def logout_on_close():
-    # Limpa a sessão Flask
-    session.clear()
-    return jsonify({'message': 'Logout successful on tab close'})
 
 # Add a callback to set initial values for the Dash app layout
 @dash_app.callback(Output('user-full-name', 'children'),
