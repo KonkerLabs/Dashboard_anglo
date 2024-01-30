@@ -268,9 +268,6 @@ app.layout = html.Div(children=[
     ),
     html.Div(id='page-content', style={'width': '20%', 'margin': '0', 'overflowX': 'hidden'}),])
 
-
-
-
 # Rota inicial
 @app.route('/')
 def index():
@@ -292,36 +289,36 @@ def do_logout():
     # Substitua YOUR_TENANT_ID pelo seu ID de Tenant do Azure AD
     azure_logout_url = (
         f"https://login.microsoftonline.com/YOUR_TENANT_ID/oauth2/logout"
-        f"?post_logout_redirect_uri=http://localhost:5000/page_logout"
+        f"?post_logout_redirect_uri=http://dashboard-konker-anglo.onrender.com/page_logout"
     )
 
     # Redirecionar para a URL de logout do Azure AD
     return redirect(azure_logout_url)
 
 
-# Rota de logout do Azure AD
-@app.route('/azure_logout')
-def azure_logout():
-    # Limpa a sessão Flask
-    session.clear()
-
-    # Set cache control headers to prevent caching
-    response = make_response(redirect('/?rand=' + str(uuid.uuid4())))
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = '0'
-    response.delete_cookie('azure_token')
-
-    # Construct the logout URL
-    logout_url = 'https://login.microsoftonline.com/6495f1e2-0d47-4be2-826d-bef88fc09df3/oauth2/v2.0/logout?post_logout_redirect_uri='
-    redirect_uri = url_for('page_logout', _external=True)
-    logout_url += quote(redirect_uri)
-    # Ensure the URI is properly encoded
-    encoded_redirect_uri = quote(redirect_uri, safe='')
-    # Append the encoded URI to the logout URL
-    logout_url += encoded_redirect_uri
-    # Redirect the user to the Azure AD logout URL
-    return redirect(logout_url)
+## Rota de logout do Azure AD
+#@app.route('/azure_logout')
+#def azure_logout():
+#   # Limpa a sessão Flask
+#    session.clear()
+#
+#    # Set cache control headers to prevent caching
+#    response = make_response(redirect('/?rand=' + str(uuid.uuid4())))
+#    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+#    response.headers['Pragma'] = 'no-cache'
+#    response.headers['Expires'] = '0'
+#    response.delete_cookie('azure_token')
+#
+#    # Construct the logout URL
+#    logout_url = 'https://login.microsoftonline.com/6495f1e2-0d47-4be2-826d-bef88fc09df3/oauth2/v2.0/logout?post_logout_redirect_uri='
+#    redirect_uri = url_for('page_logout', _external=True)
+#    logout_url += quote(redirect_uri)
+#    # Ensure the URI is properly encoded
+#    encoded_redirect_uri = quote(redirect_uri, safe='')
+#    # Append the encoded URI to the logout URL
+#    logout_url += encoded_redirect_uri
+#    # Redirect the user to the Azure AD logout URL
+#    return redirect(logout_url)
 
 # Add your existing route for page_logout.html
 @app.route('/page_logout')
@@ -356,9 +353,6 @@ def login_required(f):
 @login_required
 def display_dashboard(value, user_full_name):
     # Renderizar o conteúdo do aplicativo Dash se autenticado
-    return dash_app.index()
-
-    # Render the Dash app content if authenticated
     return dash_app.index()
 
 
