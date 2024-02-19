@@ -52,7 +52,6 @@ azure = oauth.remote_app(
     access_token_url='https://login.microsoftonline.com/6495f1e2-0d47-4be2-826d-bef88fc09df3/oauth2/v2.0/token',
     authorize_url='https://login.microsoftonline.com/6495f1e2-0d47-4be2-826d-bef88fc09df3/oauth2/v2.0/authorize'
 )
-
 # Criação do aplicativo Dash
 dash_app = Dash(__name__, server=app, url_base_pathname='/dashboard/')
 
