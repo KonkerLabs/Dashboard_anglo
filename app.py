@@ -61,11 +61,12 @@ owm = pyowm.OWM('fa47fceaf9e211df22cedbb5c4f2b456')  # Substitua pela sua chave 
 mgr = owm.weather_manager()
 
 # Dicionário para armazenar dados
-data_dict = {'Measurement': [1, 2, 3, 4, 5, 6], 'Mass (1000 x kg)': [12.32, 11.40, 15.10, 9.76, 10.97, 8.34], 'Temperature (°C)': [28.57, 28.57, 28.51, 28.51, 28.46, 28.48], 'Current Time': ['10:30:00', '10:31:00', '10:32:00', '10:33:00', '10:34:00', '10:35:00']}
+data_dict = {'Measurement': [1, 2, 3, 4, 5, 6,7, 8, 9, 10, 11, 12], 'Mass (1000 x kg)': [0.07, 0.1, 0.02, 0.1, 0.05, 0.06, 0.02, 0.08, 0.02, 0.07, 0.06, 0.1], 'Temperature (°C)': [28.12, 28.41, 28.24, 28.27, 28.14, 28.34, 28.26, 28.18, 28.38, 28.44, 28.01, 28.09]
+​, 'Current Time': ['10:00:00', '10:15:00', '10:30:00', '10:45:00', '11:00:00', '11:15:00', '11:30:00', '11:45:00', '12:00:00', '12:15:00', 12:30:00', '12:45:00']}
 
 # Sample data
-dt = {"Measurement": [1, 2, 3, 4, 5, 6],
-      "Mass (1000 x kg)": [12, 11, 15, 9, 10, 8]}
+dt = {"Measurement": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      "Mass (1000 x kg)": [0.07, 0.1, 0.02, 0.1, 0.05, 0.06, 0.02, 0.08, 0.02, 0.07, 0.06, 0.1]}
 
 df = pd.DataFrame(dt)
 fig = px.line(df, x="Measurement", y="Mass (1000 x kg)", markers=True, template='plotly_dark',
