@@ -61,8 +61,8 @@ owm = pyowm.OWM('fa47fceaf9e211df22cedbb5c4f2b456')  # Substitua pela sua chave 
 mgr = owm.weather_manager()
 
 # Dicionário para armazenar dados
-data_dict = {'Measurement': [1, 2, 3, 4, 5, 6,7, 8, 9, 10, 11, 12], 'Mass (1000 x kg)': [0.00007, 0.0001, 0.00002, 0.0001, 0.00005, 0.00006, 0.00002, 0.00008, 0.00002, 0.00007, 0.00006, 0.00001], 'Temperature (°C)': [28.12, 28.41, 28.24, 28.27, 28.14, 28.34, 28.26, 28.18, 28.38, 28.44, 28.01, 28.09]
-​, 'Current Time': ['10:00:12', '10:15:11', '10:30:08', '10:45:14', '11:00:13', '11:15:09', '11:30:05', '11:45:04', '12:00:01', '12:14:59', 12:30:01', '12:45:07']}
+data_dict = {'Measurement': [1, 2, 3, 4, 5, 6,7, 8, 9, 10, 11, 12], 'Mass (1000 x kg)': [0.00007, 0.0001, 0.00002, 0.0001, 0.00005, 0.00006, 0.00002, 0.00008, 0.00002, 0.00007, 0.00006, 0.00001], 'Temperature (°C)': [28.12, 28.41, 28.24, 28.27, 28.14, 28.34, 28.26, 28.18, 28.38, 28.44, 28.01, 28.09],
+             'Current Time': ['10:00:12', '10:15:11', '10:30:08', '10:45:14', '11:00:13', '11:15:09', '11:30:05', '11:45:04', '12:00:01', '12:14:59', '12:30:01', '12:45:07']}
 
 # Sample data
 dt = {"Measurement": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -87,7 +87,7 @@ def update_data():
     new_time=current_time_zero
     current_time = new_time.strftime("%H:%M:%S")
     temperature = get_temperature()
-    random_mass = round(np.random.uniform(0, 0.1), 2)  # Substituir isso pelo método real de obtenção de massa aleatória
+    random_mass = round(np.random.uniform(0, 0.0001), 5)  # Substituir isso pelo método real de obtenção de massa aleatória
 
     # Verifica se a lista 'Measurement' está vazia
     if data_dict['Measurement']:
