@@ -54,7 +54,7 @@ azure = oauth.remote_app(
 )
 
 # Criação do aplicativo Dash
-dash_app = Dash(__name__, server=app, url_base_pathname='/dashboard')
+dash_app = Dash(__name__, server=app, url_base_pathname='/dashboard/')
 
 
 owm = pyowm.OWM('fa47fceaf9e211df22cedbb5c4f2b456')  # Substitua pela sua chave real do OWM
