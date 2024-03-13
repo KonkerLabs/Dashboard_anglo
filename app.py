@@ -54,22 +54,22 @@ azure = oauth.remote_app(
 )
 
 # Criação do aplicativo Dash
-dash_app = Dash(__name__, server=app, url_base_pathname='/dashboard/')
+dash_app = Dash(__name__, server=app, url_base_pathname='/dashboard')
 
 
 owm = pyowm.OWM('fa47fceaf9e211df22cedbb5c4f2b456')  # Substitua pela sua chave real do OWM
 mgr = owm.weather_manager()
 
 # Dicionário para armazenar dados
-data_dict = {'Measurement': [1, 2, 3, 4, 5, 6,7, 8, 9, 10, 11, 12], 'Mass (1000 x kg)': [0.00007, 0.0001, 0.00002, 0.0001, 0.00005, 0.00006, 0.00002, 0.00008, 0.00002, 0.00007, 0.00006, 0.00001], 'Temperature (°C)': [28.12, 28.41, 28.24, 28.27, 28.14, 28.34, 28.26, 28.18, 28.38, 28.44, 28.01, 28.09],
+data_dict = {'Measurement': [1, 2, 3, 4, 5, 6,7, 8, 9, 10, 11, 12], 'Mass (Ton)': [50.0, 53.09, 56.18, 59.27, 62.36, 65.45, 68.55, 71.64, 74.73, 77.82, 80.0], 'Temperature (°C)': [28.12, 28.41, 28.24, 28.27, 28.14, 28.34, 28.26, 28.18, 28.38, 28.44, 28.01, 28.09],
              'Current Time': ['10:00:12', '10:15:11', '10:30:08', '10:45:14', '11:00:13', '11:15:09', '11:30:05', '11:45:04', '12:00:01', '12:14:59', '12:30:01', '12:45:07']}
 
 # Sample data
 dt = {"Measurement": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-      "Mass (1000 x kg)": [0.00007, 0.0001, 0.00002, 0.0001, 0.00005, 0.00006, 0.00002, 0.00008, 0.00002, 0.00007, 0.00006, 0.00001]}
+      "Mass (Ton)": [50.0, 53.09, 56.18, 59.27, 62.36, 65.45, 68.55, 71.64, 74.73, 77.82, 80.0]}
 
 df = pd.DataFrame(dt)
-fig = px.line(df, x="Measurement", y="Mass (1000 x kg)", markers=True, template='plotly_dark',
+fig = px.line(df, x="Measurement", y="Mass (Ton)", markers=True, template='plotly_dark',
               title="Real-time ore pile mass")
 
 
@@ -87,7 +87,7 @@ def update_data():
     new_time=current_time_zero
     current_time = new_time.strftime("%H:%M:%S")
     temperature = get_temperature()
-    random_mass = round(np.random.uniform(0, 0.0001), 5)  # Substituir isso pelo método real de obtenção de massa aleatória
+    random_mass = round(np.random.uniform(30, 80), 2)  # Substituir isso pelo método real de obtenção de massa aleatória
 
     # Verifica se a lista 'Measurement' está vazia
     if data_dict['Measurement']:
@@ -97,7 +97,7 @@ def update_data():
 
     # Append new data to the dictionary
     data_dict['Measurement'].append(next_time)
-    data_dict['Mass (1000 x kg)'].append(random_mass)
+    data_dict['Mass (Ton)'].append(random_mass)
     data_dict['Temperature (°C)'].append(temperature)
     data_dict['Current Time'].append(current_time)
 
@@ -168,9 +168,9 @@ dash_app.layout = html.Div(
                             id='table-data',
                             columns=[
                                 {'name': 'Measurement', 'id': 'Measurement'},
-                                {'name': 'Mass (1000 x kg)', 'id': 'Mass (1000 x kg)'},
+                                {'name': 'Mass (Ton)', 'id': 'Mass (Ton)'},
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
-                                {'name': 'Current Time', 'id': 'Current Time'}
+                                {'name': 'Data/Time', 'id': 'Current Time'}
                             ],
                             data=pd.DataFrame(data_dict).to_dict('records'),
                             style_table={'height': 275, 'width': '99%'},
@@ -224,7 +224,7 @@ def update_data_and_graph(n_intervals, user_full_name):
 
     # Atualizar o gráfico com as novas informações
     new_fig = px.line(pd.DataFrame(data_dict),
-                      x="Measurement", y="Mass (1000 x kg)",
+                      x="Measurement", y="Mass (Ton)",
                       markers=True, template='plotly_dark',
                       width=1000, height=350, title="Real-time ore pile mass")
     # Centralizar o título do gráfico
