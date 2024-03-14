@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Página Inicial</title>
+    <title>Página Logout</title>
     <style>
         body {
             background-color: #90ee90;
-            font-family: "Times New Roman", Times, serif; font-size: 12px;
+            font-family: 'Arial', sans-serif; font-size: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -34,12 +34,7 @@
         h1 {
             color: #333;
             margin-bottom: 30px;
-            font-size: 18px;
-        }
-
-        form {
-            display: flex;
-            justify-content: center;
+            font-size: 20px;
         }
 
         button {
@@ -63,17 +58,19 @@
         <img src="{{ url_for('static', filename='image/konker.png') }}" alt="Logo">
 
         <!-- Substitua o título pelo seu HTML especificado -->
-        <h1>Para acessar novamente a Dashboard, clique no botão abaixo</h1>
+        <h1>Clique no botão abaixo para acessar novamente</h1>
         <h4 id='user-full-name' style='"Times New Roman", Times, serif: 12px;'>{{ user }}</h4>
 
-        <!-- Formulário de login com um botão de envio -->
-        <form action="{{ url_for('index') }}" method="get">
-    <button type="submit" onclick="redirectToHomepage()">Retornar à página inicial</button>
-        </form>
+        <!-- Botão de redirecionamento -->
+        <button onclick="logoutAndRedirect()">Retornar à página inicial</button>
 
-        <!-- Script para redirecionar para a página inicial ao clicar no botão -->
+        <!-- Script para realizar o logout e redirecionar para a página inicial -->
         <script>
-            function redirectToHomepage() {
+            function logoutAndRedirect() {
+                // Realizar o logout
+                window.location.href = "{{ url_for('do_logout') }}";
+
+                // Redirecionar para a página inicial após o logout
                 window.location.href = "{{ url_for('index') }}";
             }
         </script>
