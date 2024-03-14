@@ -152,12 +152,12 @@ dash_app.layout = html.Div(
             children=[
                 dcc.Interval(
                     id='interval-component',
-                    interval=15*60*1000,
+                    interval=60*1000,
                     n_intervals=0
                 ),
                 dcc.Interval(
                     id='table-interval-component',
-                    interval=15*60*1000,
+                    interval=60*1000,
                     n_intervals=0
                 ),
                 html.Div(
@@ -258,12 +258,12 @@ app.layout = html.Div(children=[
     dcc.Location(id='url', refresh=False),
     dcc.Interval(
         id='interval-component',
-        interval=15*60*1000,  # em milissegundos, atualiza a cada 15 minutos
+        interval=60*1000,  # em milissegundos, atualiza a cada 15 minutos
         n_intervals=0
     ),
     dcc.Interval(
         id='table-interval-component',
-        interval=15*60*1000,  # em milissegundos, atualiza a cada 15 minutos
+        interval=60*1000,  # em milissegundos, atualiza a cada 15 minutos
         n_intervals=0
     ),
     html.Div(id='page-content', style={'width': '20%', 'margin': '0', 'overflowX': 'hidden'}),])
