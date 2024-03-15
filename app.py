@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, request, jsonify, make_response
+from flask import Flask, render_template, redirect, url_for, session, request, send_file, jsonify, make_response
 from flask_oauthlib.client import OAuth
 from flask_session import Session
 from dash import Dash, html
@@ -61,7 +61,10 @@ owm = pyowm.OWM('fa47fceaf9e211df22cedbb5c4f2b456')  # Substitua pela sua chave 
 mgr = owm.weather_manager()
 
 # Dicionário para armazenar dados
-data_dict = {'Measurement': [1, 2, 3, 4, 5, 6,7, 8, 9, 10, 11, 12], 'Mass (Ton)': [54.14, 75.32, 72.45, 64.91, 68.87, 53.76, 77.68, 59.03, 61.2, 52.56, 76.97, 78.22], 'Temperature (°C)': [28.12, 28.41, 28.24, 28.27, 28.14, 28.34, 28.26, 28.18, 28.38, 28.44, 28.01, 28.09],
+data_dict = {'Measurement': [1, 2, 3, 4, 5, 6,7, 8, 9, 10, 11, 12],
+             'Mass (Ton)': [54.14, 75.32, 72.45, 64.91, 68.87, 53.76, 77.68, 59.03, 61.2, 52.56, 76.97, 78.22],
+             'Temperature (°C)': [28.12, 28.41, 28.24, 28.27, 28.14, 28.34, 28.26, 28.18, 28.38, 28.44, 28.01, 28.09],
+             'Current Date': [ '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024'],
              'Current Time': ['10:00:12', '10:15:11', '10:30:08', '10:45:14', '11:00:13', '11:15:09', '11:30:05', '11:45:04', '12:00:01', '12:14:59', '12:30:01', '12:45:07']}
 
 # Sample data
@@ -86,6 +89,7 @@ def update_data():
     current_time_zero=datetime.now()
     new_time=current_time_zero
     current_time = new_time.strftime("%H:%M:%S")
+    current_date = new_time.strftime("%d-%m-%Y")  # Adiciona a data atual
     temperature = get_temperature()
     random_mass = round(np.random.uniform(30, 80), 2)  # Substituir isso pelo método real de obtenção de massa aleatória
 
@@ -99,6 +103,7 @@ def update_data():
     data_dict['Measurement'].append(next_time)
     data_dict['Mass (Ton)'].append(random_mass)
     data_dict['Temperature (°C)'].append(temperature)
+    data_dict['Current Date'].append(current_date)
     data_dict['Current Time'].append(current_time)
 
 update_data()
@@ -126,8 +131,8 @@ dash_app.layout = html.Div(
                 html.A(
                     html.Button("Download Data", id="download-button", style=button_style),
                     id="download-link",
-                    download="data.xlsx",
-                    href="",
+                    download="data.csv",
+                    href="/download_csv",
                     target="_blank",
                     style={'margin-top': '10px'}
                 ),
@@ -170,7 +175,8 @@ dash_app.layout = html.Div(
                                 {'name': 'Measurement', 'id': 'Measurement'},
                                 {'name': 'Mass (Ton)', 'id': 'Mass (Ton)'},
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
-                                {'name': 'Data/Time', 'id': 'Current Time'}
+                                {'name': 'Current Date', 'id': 'Current Date'},
+                                {'name': 'Current Time', 'id': 'Current Time'}
                             ],
                             data=pd.DataFrame(data_dict).to_dict('records'),
                             style_table={'height': 275, 'width': '99%'},
@@ -281,48 +287,23 @@ def login():
 # Rota para lidar com o logout efetivo
 @app.route('/do_logout')
 def do_logout():
-    # Destruir a sessão Flask
+    # Limpar a sessão Flask
     session.clear()
 
     # URL de logout do Azure AD
     # Substitua YOUR_TENANT_ID pelo seu ID de Tenant do Azure AD
     azure_logout_url = (
         f"https://login.microsoftonline.com/YOUR_TENANT_ID/oauth2/logout"
-        f"?post_logout_redirect_uri=http://anglo.konker.me/page_logout"
+        f"?post_logout_redirect_uri=http://localhost:5000/page_logout"
     )
 
     # Redirecionar para a URL de logout do Azure AD
     return redirect(azure_logout_url)
 
-
-## Rota de logout do Azure AD
-#@app.route('/azure_logout')
-#def azure_logout():
-#   # Limpa a sessão Flask
-#    session.clear()
-#
-#    # Set cache control headers to prevent caching
-#    response = make_response(redirect('/?rand=' + str(uuid.uuid4())))
-#    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-#    response.headers['Pragma'] = 'no-cache'
-#    response.headers['Expires'] = '0'
-#    response.delete_cookie('azure_token')
-#
-#    # Construct the logout URL
-#    logout_url = 'https://login.microsoftonline.com/6495f1e2-0d47-4be2-826d-bef88fc09df3/oauth2/v2.0/logout?post_logout_redirect_uri='
-#    redirect_uri = url_for('page_logout', _external=True)
-#    logout_url += quote(redirect_uri)
-#    # Ensure the URI is properly encoded
-#    encoded_redirect_uri = quote(redirect_uri, safe='')
-#    # Append the encoded URI to the logout URL
-#    logout_url += encoded_redirect_uri
-#    # Redirect the user to the Azure AD logout URL
-#    return redirect(logout_url)
-
-# Add your existing route for page_logout.html
+# Rota para renderizar a página de logout
 @app.route('/page_logout')
 def page_logout():
-    # Add any logic or rendering for your page_logout.html page
+    # Renderizar a página de logout
     return render_template('page_logout.html')
 
 # Rota autorizada
@@ -369,6 +350,24 @@ def set_initial_values(value):
 
     return full_name
 
+@app.route('/download_csv')
+def download_csv():
+    # Criar DataFrame a partir do data_dict
+    df = pd.DataFrame(data_dict)
+
+    # Criar um objeto BytesIO para armazenar os dados do arquivo CSV
+    csv_output = BytesIO()
+
+    # Salvar o DataFrame como um arquivo CSV na memória
+    df.to_csv(csv_output, index=False, sep=',')
+
+    # Definir o ponteiro de leitura para o início do arquivo
+    csv_output.seek(0)
+
+    # Retornar o arquivo CSV como uma resposta de download
+    return send_file(csv_output,
+                     attachment_filename='data.csv',
+                     as_attachment=True)
 
 # Função para obter o token
 @azure.tokengetter
