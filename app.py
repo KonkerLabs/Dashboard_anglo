@@ -28,21 +28,28 @@ from dotenv import load_dotenv
 import time
 
 
-UPDATE_INTERVAL = 15 * 60 * 1000 # Update time in milisseconds (15 min)
+UPDATE_INTERVAL = 15*1000#15 * 60 * 1000 # Update time in milisseconds (15 min)
 
 def request_from_API(uri):
     load_dotenv()
     TOKEN = os.environ.get('TOKEN')
-
     headers = {'Authorization': TOKEN}
-
     url_base_api = 'http://localhost:8000/api/v1/'
 
-    result = requests.get(url=url_base_api+uri, headers=headers)
-    object = result.json()
+    try:
+        response = requests.get(url=url_base_api+uri, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            payload = data["payload"]
+            return payload
 
-    payload = object["payload"]
-    return payload
+            if not data:
+                print("No data available.")
+        else:
+            logging.error(f"Bad response - Status code: {response.status_code}")
+    except Exception as e:
+        print("An error occurred while fetching data.")
+
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css', '/static/styles.css']
 pil_img = Image.open("logo-blavk.png")
@@ -104,28 +111,33 @@ def update_data():
     new_time=current_time_zero
     temperature = get_temperature()
 
-    payload = request_from_API('?limit=10')
+    try:
+        payload = request_from_API('?limit=10')
 
-    for item in payload:
-        ts   = item["_ts"]
-        time = datetime.utcfromtimestamp(ts).strftime('%m-%d %H:%M:%S')
+        for item in payload:
+            ts   = item["_ts"]
+            time = datetime.utcfromtimestamp(ts).strftime('%m-%d %H:%M:%S')
 
-        if time in data_dict['Measurement']:
-            pass
-        else:
-            current_time_zero=datetime.now()
-            new_time=current_time_zero
-            temperature = get_temperature()
+            if time in data_dict['Measurement']:
+                pass
+            else:
+                current_time_zero=datetime.now()
+                new_time=current_time_zero
+                temperature = get_temperature()
 
-            mass = item["instantaneous_mass"]
-            date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
+                mass = item["instantaneous_mass"]
+                date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
 
-            # Append new data to the dictionary
-            data_dict['Measurement'].append(time)
-            data_dict['Mass (Ton)'].append(mass)
-            data_dict['Temperature (°C)'].append(temperature)
-            data_dict['Current Date'].append(date)
-            data_dict['Current Time'].append(time)
+                # Append new data to the dictionary
+                data_dict['Measurement'].append(time)
+                data_dict['Mass (Ton)'].append(mass)
+                data_dict['Temperature (°C)'].append(temperature)
+                data_dict['Current Date'].append(date)
+                data_dict['Current Time'].append(time)
+
+    except Exception as e:
+        print("An error occurred while fetching data: using old data.")
+
 
 
 update_data()
