@@ -20,6 +20,35 @@ from urllib.parse import quote
 from urllib.parse import urlparse, urlunparse
 from functools import wraps
 
+import requests
+import json
+import sys
+import os
+from dotenv import load_dotenv
+import time
+
+
+UPDATE_INTERVAL = 15*1000#15 * 60 * 1000 # Update time in milisseconds (15 min)
+
+def request_from_API(uri):
+    load_dotenv()
+    TOKEN = os.environ.get('TOKEN')
+    headers = {'Authorization': TOKEN}
+    url_base_api = 'http://localhost:8000/api/v1/'
+
+    try:
+        response = requests.get(url=url_base_api+uri, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            payload = data["payload"]
+            return payload
+
+            if not data:
+                print("No data available.")
+        else:
+            logging.error(f"Bad response - Status code: {response.status_code}")
+    except Exception as e:
+        print("An error occurred while fetching data.")
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css', '/static/styles.css']
@@ -61,52 +90,67 @@ owm = pyowm.OWM('fa47fceaf9e211df22cedbb5c4f2b456')  # Substitua pela sua chave 
 mgr = owm.weather_manager()
 
 # Dicionário para armazenar dados
-data_dict = {'Measurement': [1, 2, 3, 4, 5, 6,7, 8, 9, 10, 11, 12],
-             'Mass (Ton)': [54.14, 75.32, 72.45, 64.91, 68.87, 53.76, 77.68, 59.03, 61.2, 52.56, 76.97, 78.22],
-             'Temperature (°C)': [28.12, 28.41, 28.24, 28.27, 28.14, 28.34, 28.26, 28.18, 28.38, 28.44, 28.01, 28.09],
-             'Current Date': [ '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024', '14-03-2024'],
-             'Current Time': ['10:00:12', '10:15:11', '10:30:08', '10:45:14', '11:00:13', '11:15:09', '11:30:05', '11:45:04', '12:00:01', '12:14:59', '12:30:01', '12:45:07']}
-
-# Sample data
-dt = {"Measurement": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-      "Mass (Ton)": [54.14, 75.32, 72.45, 64.91, 68.87, 53.76, 77.68, 59.03, 61.2, 52.56, 76.97, 78.22]}
-
-df = pd.DataFrame(dt)
-fig = px.line(df, x="Measurement", y="Mass (Ton)", markers=True, template='plotly_dark',
-              title="Real-time ore pile mass")
-
-
+data_dict = {'Measurement': [],
+             'Mass (Ton)': [],
+             'Temperature (°C)': [],
+             'Current Date': [],
+             'Current Time': []
+            }
 
 # Start the scheduler for updating data every 1 minute
 scheduler = BackgroundScheduler()
+
 def get_temperature():
     observation = mgr.weather_at_place("Belo Horizonte,BR")
     w = observation.weather
     return w.temperature('celsius')['temp']
 
+# Update data_dict with current time, temperature, and random Mass values
 def update_data():
-    # Update data_dict with current time, temperature, and random Mass values
     current_time_zero=datetime.now()
     new_time=current_time_zero
-    current_time = new_time.strftime("%H:%M:%S")
-    current_date = new_time.strftime("%d-%m-%Y")  # Adiciona a data atual
     temperature = get_temperature()
-    random_mass = round(np.random.uniform(30, 80), 2)  # Substituir isso pelo método real de obtenção de massa aleatória
 
-    # Verifica se a lista 'Measurement' está vazia
-    if data_dict['Measurement']:
-        next_time = max(data_dict['Measurement']) + 1
-    else:
-        next_time = 1
+    try:
+        payload = request_from_API('?limit=10')
 
-    # Append new data to the dictionary
-    data_dict['Measurement'].append(next_time)
-    data_dict['Mass (Ton)'].append(random_mass)
-    data_dict['Temperature (°C)'].append(temperature)
-    data_dict['Current Date'].append(current_date)
-    data_dict['Current Time'].append(current_time)
+        for item in payload:
+            ts   = item["_ts"]
+            time = datetime.utcfromtimestamp(ts).strftime('%m-%d %H:%M:%S')
+
+            if time in data_dict['Measurement']:
+                pass
+            else:
+                current_time_zero=datetime.now()
+                new_time=current_time_zero
+                temperature = get_temperature()
+
+                mass = item["instantaneous_mass"]
+                date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
+
+                # Append new data to the dictionary
+                data_dict['Measurement'].append(time)
+                data_dict['Mass (Ton)'].append(mass)
+                data_dict['Temperature (°C)'].append(temperature)
+                data_dict['Current Date'].append(date)
+                data_dict['Current Time'].append(time)
+
+    except Exception as e:
+        print("An error occurred while fetching data: using old data.")
+
+
 
 update_data()
+
+num_values = 10 # Maximum of data displayed on the graph
+
+df = pd.DataFrame(data_dict)
+
+subset_df = df.tail(num_values)
+fig = px.line(subset_df, x="Measurement", y="Mass (Ton)", markers=True, template='plotly_dark',
+              title="Real-time ore pile mass")
+
+
 dash_app.layout = html.Div(
     children=[
         html.Div(
@@ -157,12 +201,12 @@ dash_app.layout = html.Div(
             children=[
                 dcc.Interval(
                     id='interval-component',
-                    interval=60*1000,
+                    interval= UPDATE_INTERVAL,
                     n_intervals=0
                 ),
                 dcc.Interval(
                     id='table-interval-component',
-                    interval=60*1000,
+                    interval= UPDATE_INTERVAL,
                     n_intervals=0
                 ),
                 html.Div(
@@ -229,7 +273,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     update_data()
 
     # Atualizar o gráfico com as novas informações
-    new_fig = px.line(pd.DataFrame(data_dict),
+    new_fig = px.line(pd.DataFrame(data_dict).tail(num_values),
                       x="Measurement", y="Mass (Ton)",
                       markers=True, template='plotly_dark',
                       width=1000, height=350, title="Real-time ore pile mass")
@@ -264,12 +308,12 @@ app.layout = html.Div(children=[
     dcc.Location(id='url', refresh=False),
     dcc.Interval(
         id='interval-component',
-        interval=60*1000,  # em milissegundos, atualiza a cada 15 minutos
+        interval= UPDATE_INTERVAL,
         n_intervals=0
     ),
     dcc.Interval(
         id='table-interval-component',
-        interval=60*1000,  # em milissegundos, atualiza a cada 15 minutos
+        interval= UPDATE_INTERVAL,
         n_intervals=0
     ),
     html.Div(id='page-content', style={'width': '20%', 'margin': '0', 'overflowX': 'hidden'}),])
