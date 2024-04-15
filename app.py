@@ -28,13 +28,13 @@ from dotenv import load_dotenv
 import time
 
 
-UPDATE_INTERVAL = 15*1000#15 * 60 * 1000 # Update time in milisseconds (15 min)
+UPDATE_INTERVAL = 15 * 60 * 1000 # Update time in milisseconds (15 min)
 
 def request_from_API(uri):
     load_dotenv()
     TOKEN = os.environ.get('TOKEN')
     headers = {'Authorization': TOKEN}
-    url_base_api = 'http://localhost:8000/api/v1/'
+    url_base_api = 'http://129.148.56.204:5000/api/v1/'
 
     try:
         response = requests.get(url=url_base_api+uri, headers=headers)
@@ -116,7 +116,7 @@ def update_data():
 
         for item in payload:
             ts   = item["_ts"]
-            time = datetime.utcfromtimestamp(ts).strftime('%m-%d %H:%M:%S')
+            time = pd.to_datetime(ts, unit='s', utc=True).tz_convert('America/Sao_Paulo')
 
             if time in data_dict['Measurement']:
                 pass
