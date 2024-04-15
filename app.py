@@ -216,7 +216,7 @@ dash_app.layout = html.Div(
                         dash_table.DataTable(
                             id='table-data',
                             columns=[
-                                {'name': 'Date Measurement', 'id': 'Measurement'},
+                                {'name': 'Measurement date', 'id': 'Measurement'},
                                 {'name': 'Mass (Ton)', 'id': 'Mass (Ton)'},
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
                                 {'name': 'Current Date', 'id': 'Current Date'},
@@ -274,7 +274,7 @@ def update_data_and_graph(n_intervals, user_full_name):
 
     # Atualizar o gráfico com as novas informações
     new_fig = px.line(pd.DataFrame(data_dict).tail(num_values),
-                      x="Measurement", y="Mass (Ton)",
+                      x="Measurement date", y="Mass (Ton)",
                       markers=True, template='plotly_dark',
                       width=1000, height=350, title="Real-time ore pile mass")
     # Centralizar o título do gráfico
