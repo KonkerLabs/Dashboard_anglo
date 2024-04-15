@@ -90,8 +90,8 @@ owm = pyowm.OWM('fa47fceaf9e211df22cedbb5c4f2b456')  # Substitua pela sua chave 
 mgr = owm.weather_manager()
 
 # Dicionário para armazenar dados
-data_dict = {'Measurement': [],
-             'Mass (Ton)': [],
+data_dict = {'Measurement date': [],
+             'Mass (kTon)': [],
              'Temperature (°C)': [],
              'Current Date': [],
              'Current Time': []
@@ -129,8 +129,8 @@ def update_data():
                 date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
 
                 # Append new data to the dictionary
-                data_dict['Measurement'].append(time)
-                data_dict['Mass (Ton)'].append(mass)
+                data_dict['Measurement date'].append(time)
+                data_dict['Mass (kTon)'].append(mass)
                 data_dict['Temperature (°C)'].append(temperature)
                 data_dict['Current Date'].append(date)
                 data_dict['Current Time'].append(time)
@@ -147,7 +147,7 @@ num_values = 10 # Maximum of data displayed on the graph
 df = pd.DataFrame(data_dict)
 
 subset_df = df.tail(num_values)
-fig = px.line(subset_df, x="Measurement", y="Mass (Ton)", markers=True, template='plotly_dark',
+fig = px.line(subset_df, x="Measurement date", y="Mass (kTon)", markers=True, template='plotly_dark',
               title="Real-time ore pile mass")
 
 
@@ -217,7 +217,7 @@ dash_app.layout = html.Div(
                             id='table-data',
                             columns=[
                                 {'name': 'Measurement date', 'id': 'Measurement'},
-                                {'name': 'Mass (Ton)', 'id': 'Mass (Ton)'},
+                                {'name': 'Mass (kTon)', 'id': 'Mass (kTon)'},
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
                                 {'name': 'Current Date', 'id': 'Current Date'},
                                 {'name': 'Current Time', 'id': 'Current Time'}
@@ -274,7 +274,7 @@ def update_data_and_graph(n_intervals, user_full_name):
 
     # Atualizar o gráfico com as novas informações
     new_fig = px.line(pd.DataFrame(data_dict).tail(num_values),
-                      x="Measurement date", y="Mass (Ton)",
+                      x="Measurement date", y="Mass (kTon)",
                       markers=True, template='plotly_dark',
                       width=1000, height=350, title="Real-time ore pile mass")
     # Centralizar o título do gráfico
