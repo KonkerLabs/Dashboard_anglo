@@ -94,7 +94,7 @@ data_dict = {'Measurement date': [],
              'Mass (kTon)': [],
              'Temperature (°C)': [],
              'Current Date': [],
-             'Current Time': []
+             'Measurement Time': []
             }
 
 # Start the scheduler for updating data every 1 minute
@@ -118,7 +118,7 @@ def update_data():
             ts   = item["_ts"]
             time = pd.to_datetime(ts, unit='s', utc=True).tz_convert('America/Sao_Paulo')
 
-            if time in data_dict['Measurement']:
+            if time in data_dict['Measurement date']:
                 pass
             else:
                 current_time_zero=datetime.now()
@@ -133,7 +133,7 @@ def update_data():
                 data_dict['Mass (kTon)'].append(mass)
                 data_dict['Temperature (°C)'].append(temperature)
                 data_dict['Current Date'].append(date)
-                data_dict['Current Time'].append(time)
+                data_dict['Measurement time'].append(time)
 
     except Exception as e:
         print("An error occurred while fetching data: using old data.")
@@ -219,8 +219,7 @@ dash_app.layout = html.Div(
                                 {'name': 'Measurement date', 'id': 'Measurement'},
                                 {'name': 'Mass (kTon)', 'id': 'Mass (kTon)'},
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
-                                {'name': 'Current Date', 'id': 'Current Date'},
-                                {'name': 'Current Time', 'id': 'Current Time'}
+                                {'name': 'Measurement time', 'id': 'Measurement time'}
                             ],
                             data=pd.DataFrame(data_dict).to_dict('records'),
                             style_table={'height': 275, 'width': '99%'},
