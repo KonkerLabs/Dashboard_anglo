@@ -216,7 +216,7 @@ dash_app.layout = html.Div(
                         dash_table.DataTable(
                             id='table-data',
                             columns=[
-                                {'name': 'Measurement', 'id': 'Measurement'},
+                                {'name': 'Date Measurement', 'id': 'Measurement'},
                                 {'name': 'Mass (Ton)', 'id': 'Mass (Ton)'},
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
                                 {'name': 'Current Date', 'id': 'Current Date'},
