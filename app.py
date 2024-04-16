@@ -131,7 +131,7 @@ def update_data():
                 time_str = time.strftime('%H:%M:%S')  # Formatar a hora como HH:MM:SS
 
                 # Append new data to the dictionary
-                data_dict['Measurement date'].insert(0, time)
+                data_dict['Measurement date'].insert(0, date)
                 data_dict['Mass (kTon)'].insert(0, mass)
                 data_dict['Temperature (°C)'].insert(0, temperature)
                 data_dict['Current Date'].insert(0, date)
