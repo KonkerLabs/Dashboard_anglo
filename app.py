@@ -272,7 +272,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     user_info = azure.get('me')
     full_name = user_info.data.get('displayName', 'User')  # Get the user's display name
 
-    update_data()
+    #########update_data()
 
     # Atualizar o dataframe e o gráfico com os dados mais recentes
     new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
