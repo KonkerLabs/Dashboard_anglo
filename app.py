@@ -129,11 +129,11 @@ def update_data():
                 date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
 
                 # Append new data to the dictionary
-                data_dict['Measurement date'].append(time)
-                data_dict['Mass (kTon)'].append(mass)
-                data_dict['Temperature (°C)'].append(temperature)
-                data_dict['Current Date'].append(date)
-                data_dict['Measurement time'].append(time)
+                data_dict['Measurement date'].insert(0, time)
+                data_dict['Mass (kTon)'].insert(0, mass)
+                data_dict['Temperature (°C)'].insert(0, temperature)
+                data_dict['Current Date'].insert(0, date)
+                data_dict['Measurement time'].insert(0, time)
 
     except Exception as e:
         print("An error occurred while fetching data: using old data.")
@@ -216,7 +216,7 @@ dash_app.layout = html.Div(
                         dash_table.DataTable(
                             id='table-data',
                             columns=[
-                                {'name': 'Measurement date', 'id': 'Measurement'},
+                                {'name': 'Measurement date', 'id': 'Measurement date'},
                                 {'name': 'Mass (kTon)', 'id': 'Mass (kTon)'},
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
                                 {'name': 'Measurement time', 'id': 'Measurement time'}
