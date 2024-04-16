@@ -126,14 +126,16 @@ def update_data():
                 temperature = get_temperature()
 
                 mass = item["instantaneous_mass"]
-                date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
+                #date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
+                date = time.strftime('%d-%m-%Y')  # Formatar a data como DD-MM-AAAA
+                time_str = time.strftime('%H:%M:%S')  # Formatar a hora como HH:MM:SS
 
                 # Append new data to the dictionary
                 data_dict['Measurement date'].insert(0, time)
                 data_dict['Mass (kTon)'].insert(0, mass)
                 data_dict['Temperature (°C)'].insert(0, temperature)
                 data_dict['Current Date'].insert(0, date)
-                data_dict['Measurement time'].insert(0, time)
+                data_dict['Measurement time'].insert(0, time_str)
 
     except Exception as e:
         print("An error occurred while fetching data: using old data.")
