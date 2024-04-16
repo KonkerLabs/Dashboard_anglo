@@ -93,7 +93,7 @@ mgr = owm.weather_manager()
 data_dict = {'Measurement date': [],
              'Mass (kTon)': [],
              'Temperature (°C)': [],
-             'Current Date': [],
+             'Measurement': [],
              'Measurement time': []
             }
 
