@@ -146,8 +146,9 @@ update_data()
 num_values = 10 # Maximum of data displayed on the graph
 
 df = pd.DataFrame(data_dict)
+#data_dict_sorted = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
 
-subset_df = df.tail(num_values)
+subset_df = df.sort_values(by='Measurement', ascending=True).tail(num_values)
 fig = px.line(subset_df, x="Measurement", y="Mass (kTon)", markers=True, template='plotly_dark',
               title="Real-time ore pile mass")
 
@@ -223,8 +224,7 @@ dash_app.layout = html.Div(
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
                                 
                             ],
-                            data_dict_sorted = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
-                            data=data_dict_sorted.to_dict('records'),
+                            data=subset_df.to_dict('records'),
                             style_table={'height': 275, 'width': '99%'},
                             style_cell={'textAlign': 'center', 'minWidth': '100px', 'font_size': '18px',
                                         'font_family': 'Arial, sans-serif'},
