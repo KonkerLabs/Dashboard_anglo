@@ -267,7 +267,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     # Check if the user is authenticated
     if 'azure_token' not in session or session['azure_token'] is None:
         # Redirect to the Azure AD login page if not authenticated
-        return dash.no_update
+        return redirect(url_for('login'))
 
     # Fetch user information using Azure OAuth token
     user_info = azure.get('me')
