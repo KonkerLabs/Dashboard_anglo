@@ -148,7 +148,7 @@ num_values = 10 # Maximum of data displayed on the graph
 df = pd.DataFrame(data_dict)
 data_dict_sorted = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
 
-subset_df = df.sort_values(by='Measurement', ascending=True).tail(num_values)
+subset_df = df.tail(num_values)
 fig = px.line(subset_df, x="Measurement", y="Mass (kTon)", markers=True, template='plotly_dark',
               title="Real-time ore pile mass")
 
@@ -173,7 +173,7 @@ dash_app.layout = html.Div(
             children=[
                 html.Img(src=Image.open("dashboard.png"), style={'height': '20%', 'width': '110%'}),
                 html.H3(f"Welcome,", style={'font-size': '20px'}),
-                html.H4(f"Username", id='user-full-name', style={'font-size': '17px'}),
+                html.H4(f"{fullname}", id='user-full-name', style={'font-size': '17px'}),
                 html.A(
                     html.Button("Download Data", id="download-button", style=button_style),
                     id="download-link",
@@ -267,7 +267,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     # Check if the user is authenticated
     if 'azure_token' not in session or session['azure_token'] is None:
         # Redirect to the Azure AD login page if not authenticated
-        return dash.no_update
+        return redirect(url_for('login'))
 
     # Fetch user information using Azure OAuth token
     user_info = azure.get('me')
