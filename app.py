@@ -267,7 +267,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     # Check if the user is authenticated
     if 'azure_token' not in session or session['azure_token'] is None:
         # Redirect to the Azure AD login page if not authenticated
-        return redirect(url_for('login'))
+        return dash.no_update
 
     # Fetch user information using Azure OAuth token
     user_info = azure.get('me')
@@ -276,7 +276,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     update_data()
 
     # Atualizar o gráfico com as novas informações
-    new_fig = px.line(pd.DataFrame(data_dict).tail(num_values),
+    new_fig = px.line(subset_df.tail(num_values),
                       x="Measurement", y="Mass (kTon)",
                       markers=True, template='plotly_dark',
                       width=1000, height=350, title="Real-time ore pile mass")
@@ -303,7 +303,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     # Altera a cor da linha do gráfico para preto
     new_fig.update_traces(line=dict(color='black'))
 
-    return pd.DataFrame(data_dict).to_dict('records'), new_fig
+    return subset_df.to_dict('records'), new_fig
 
 
 # Inline CSS styles
