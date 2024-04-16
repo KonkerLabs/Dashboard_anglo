@@ -146,8 +146,8 @@ update_data()
 
 num_values = 10 # Maximum of data displayed on the graph
 
-df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
-#df.sort_values(by='Measurement', ascending=True)
+df = pd.DataFrame(data_dict)
+df.sort_values(by='Measurement', ascending=True)
 
 subset_df = df.tail(num_values)
 fig = px.line(subset_df, x="Measurement", y="Mass (kTon)", markers=True, template='plotly_dark',
@@ -225,7 +225,7 @@ dash_app.layout = html.Div(
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
                                 
                             ],
-                            data=pd.DataFrame(data_dict).to_dict('records'),
+                            data=pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True).to_dict('records'),
                             style_table={'height': 275, 'width': '99%'},
                             style_cell={'textAlign': 'center', 'minWidth': '100px', 'font_size': '18px',
                                         'font_family': 'Arial, sans-serif'},
@@ -263,6 +263,7 @@ dash_app.layout = html.Div(
 @dash_app.callback([Output('table-data', 'data'), Output('example-graph', 'figure')],
                    [Input('interval-component', 'n_intervals')],
                    [State('user-full-name', 'children')])
+
 def update_data_and_graph(n_intervals, user_full_name):
     # Check if the user is authenticated
     if 'azure_token' not in session or session['azure_token'] is None:
