@@ -94,7 +94,7 @@ data_dict = {'Measurement date': [],
              'Mass (kTon)': [],
              'Temperature (°C)': [],
              'Current Date': [],
-             'Measurement Time': []
+             'Measurement time': []
             }
 
 # Start the scheduler for updating data every 1 minute
