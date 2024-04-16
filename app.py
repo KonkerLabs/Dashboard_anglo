@@ -127,14 +127,14 @@ def update_data():
 
                 mass = item["instantaneous_mass"]
                 #date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
-                date = time.strftime('%d-%m-%Y %H:%M:%S')  # Formatar a data como DD-MM-AAAA
+                date = time.strftime('%d-%m-%Y')  # Formatar a data como DD-MM-AAAA
                 time_str = time.strftime('%H:%M:%S')  # Formatar a hora como HH:MM:SS
 
                 # Append new data to the dictionary
                 data_dict['Measurement date'].insert(0, date)
                 data_dict['Mass (kTon)'].insert(0, mass)
                 data_dict['Temperature (°C)'].insert(0, temperature)
-                data_dict['Current Date'].insert(0, date)
+                data_dict['Measurement'].insert(0, time)
                 data_dict['Measurement time'].insert(0, time_str)
 
     except Exception as e:
@@ -149,7 +149,7 @@ num_values = 10 # Maximum of data displayed on the graph
 df = pd.DataFrame(data_dict)
 
 subset_df = df.tail(num_values)
-fig = px.line(subset_df, x="Measurement date", y="Mass (kTon)", markers=True, template='plotly_dark',
+fig = px.line(subset_df, x="Measurement", y="Mass (kTon)", markers=True, template='plotly_dark',
               title="Real-time ore pile mass")
 
 
@@ -219,9 +219,10 @@ dash_app.layout = html.Div(
                             id='table-data',
                             columns=[
                                 {'name': 'Measurement date', 'id': 'Measurement date'},
+                                {'name': 'Time', 'id': 'Measurement time'}
                                 {'name': 'Mass (kTon)', 'id': 'Mass (kTon)'},
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
-                                {'name': 'Measurement time', 'id': 'Measurement time'}
+                                
                             ],
                             data=pd.DataFrame(data_dict).to_dict('records'),
                             style_table={'height': 275, 'width': '99%'},
@@ -275,7 +276,7 @@ def update_data_and_graph(n_intervals, user_full_name):
 
     # Atualizar o gráfico com as novas informações
     new_fig = px.line(pd.DataFrame(data_dict).tail(num_values),
-                      x="Measurement date", y="Mass (kTon)",
+                      x="Measurement", y="Mass (kTon)",
                       markers=True, template='plotly_dark',
                       width=1000, height=350, title="Real-time ore pile mass")
     # Centralizar o título do gráfico
