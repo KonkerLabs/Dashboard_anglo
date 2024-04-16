@@ -219,7 +219,7 @@ dash_app.layout = html.Div(
                             id='table-data',
                             columns=[
                                 {'name': 'Measurement date', 'id': 'Measurement date'},
-                                {'name': 'Time', 'id': 'Measurement time'}
+                                {'name': 'Time', 'id': 'Measurement time'},
                                 {'name': 'Mass (kTon)', 'id': 'Mass (kTon)'},
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
                                 
