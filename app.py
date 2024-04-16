@@ -91,10 +91,10 @@ mgr = owm.weather_manager()
 
 # Dicionário para armazenar dados
 data_dict = {'Measurement date': [],
+             'Measurement time': [],
              'Mass (kTon)': [],
              'Temperature (°C)': [],
-             'Measurement': [],
-             'Measurement time': []
+             'Measurement': []
             }
 
 # Start the scheduler for updating data every 1 minute
@@ -132,10 +132,10 @@ def update_data():
 
                 # Append new data to the dictionary
                 data_dict['Measurement date'].insert(0, date)
+                data_dict['Measurement time'].insert(0, time_str)
                 data_dict['Mass (kTon)'].insert(0, mass)
                 data_dict['Temperature (°C)'].insert(0, temperature)
                 data_dict['Measurement'].insert(0, time)
-                data_dict['Measurement time'].insert(0, time_str)
 
     except Exception as e:
         print("An error occurred while fetching data: using old data.")
