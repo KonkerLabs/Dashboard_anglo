@@ -173,7 +173,7 @@ dash_app.layout = html.Div(
             children=[
                 html.Img(src=Image.open("dashboard.png"), style={'height': '20%', 'width': '110%'}),
                 html.H3(f"Welcome,", style={'font-size': '20px'}),
-                html.H4(f"{fullname}", id='user-full-name', style={'font-size': '17px'}),
+                html.H4(f"Anglo American", id='user-full-name', style={'font-size': '17px'}),
                 html.A(
                     html.Button("Download Data", id="download-button", style=button_style),
                     id="download-link",
@@ -267,7 +267,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     # Check if the user is authenticated
     if 'azure_token' not in session or session['azure_token'] is None:
         # Redirect to the Azure AD login page if not authenticated
-        return redirect(url_for('login'))
+        return dash.no_update
 
     # Fetch user information using Azure OAuth token
     user_info = azure.get('me')
