@@ -127,7 +127,7 @@ def update_data():
 
                 mass = item["instantaneous_mass"]
                 #date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
-                date = time.strftime('%d-%m-%Y')  # Formatar a data como DD-MM-AAAA
+                date = time.strftime('%d-%m-%Y %H:%M:%S')  # Formatar a data como DD-MM-AAAA
                 time_str = time.strftime('%H:%M:%S')  # Formatar a hora como HH:MM:SS
 
                 # Append new data to the dictionary
