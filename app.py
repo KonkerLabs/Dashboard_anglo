@@ -404,7 +404,7 @@ def set_initial_values(value):
 @app.route('/download_csv')
 def download_csv():
     # Criar DataFrame a partir do data_dict
-    df = pd.DataFrame(data_dict)
+    df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True).tail(num_values)
 
     # Criar um objeto BytesIO para armazenar os dados do arquivo CSV
     csv_output = BytesIO()
