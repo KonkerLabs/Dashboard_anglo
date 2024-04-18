@@ -138,7 +138,8 @@ def update_data():
 
     except Exception as e:
         print("An error occurred while fetching data: using old data.")
-
+        
+update_data()
 
 num_values = 10 # Maximum of data displayed on the graph
 
