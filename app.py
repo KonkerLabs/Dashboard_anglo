@@ -221,7 +221,7 @@ dash_app.layout = html.Div(
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
                                 
                             ],
-                            data=new_df.to_dict('records').sort_values(by='Measurement', ascending=True),
+                            data=new_df.to_dict('records'),
                             style_table={'height': 275, 'width': '99%'},
                             style_cell={'textAlign': 'center', 'minWidth': '100px', 'font_size': '18px',
                                         'font_family': 'Arial, sans-serif'},
