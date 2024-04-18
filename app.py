@@ -389,6 +389,7 @@ def display_dashboard(value, user_full_name):
 
 @app.route('/download_csv')
 def download_csv():
+    update_data()
     # Criar DataFrame a partir do data_dict
     df_download = pd.DataFrame(data_dict)
     df_download.sort_values(by='Measurement', ascending=True)
