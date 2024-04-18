@@ -141,8 +141,6 @@ def update_data():
         print("An error occurred while fetching data: using old data.")
 
 
-update_data()
-
 num_values = 10 # Maximum of data displayed on the graph
 
 df = pd.DataFrame(data_dict)
