@@ -107,7 +107,7 @@ def get_temperature():
 def update_data():
     current_time_zero=datetime.now()
     new_time=current_time_zero
-    temperature = get_temperature()
+    
 
     try:
         payload = request_from_API('?limit=10')
@@ -121,6 +121,7 @@ def update_data():
             else:
                 current_time_zero=datetime.now()
                 new_time=current_time_zero
+                temperature = get_temperature()
 
                 mass = item["instantaneous_mass"]
                 #date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
