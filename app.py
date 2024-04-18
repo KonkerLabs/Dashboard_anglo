@@ -97,13 +97,8 @@ data_dict = {'Measurement date': [],
              'Measurement': []
             }
 
-# Start the scheduler for updating data every 1 minute
-from apscheduler.triggers.interval import IntervalTrigger
-
 # Inicializar o scheduler
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=update_data, trigger=IntervalTrigger(seconds=60), id='data_update_job', replace_existing=True)
-scheduler.start()
 
 def get_temperature():
     observation = mgr.weather_at_place("Belo Horizonte,BR")
