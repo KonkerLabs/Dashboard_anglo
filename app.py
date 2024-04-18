@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output
 from dash import Dash, html, dcc, dash_table, callback, Input, Output, State
 import plotly.express as px
 import pandas as pd
-from PIL import Image
+from PIL import Image, ImageFile
 from dash import callback, Input, Output, State
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -26,7 +26,7 @@ import os
 from dotenv import load_dotenv
 import time
 
-ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 UPDATE_INTERVAL = 15 * 60 * 1000 # Update time in milisseconds (15 min)
 
 def request_from_API(uri):
