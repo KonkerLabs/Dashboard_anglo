@@ -123,7 +123,6 @@ def update_data():
             else:
                 current_time_zero=datetime.now()
                 new_time=current_time_zero
-                temperature = get_temperature()
 
                 mass = item["instantaneous_mass"]
                 #date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
@@ -266,15 +265,10 @@ def update_data_and_graph(n_intervals, user_full_name):
         # Redirect to the Azure AD login page if not authenticated
         return redirect(url_for('login'))
 
-    # Fetch user information using Azure OAuth token
-    user_info = azure.get('me')
-    full_name = user_info.data.get('displayName', 'User')  # Get the user's display name
-
-
     update_data()
     # Atualizar o dataframe e o gráfico com os dados mais recentes
-    new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
-    subset_df = new_df.tail(num_values)
+    #new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
+    subset_df = df.tail(num_values)
     
 
     # Atualizar o gráfico com as novas informações
