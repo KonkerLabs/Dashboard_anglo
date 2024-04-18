@@ -144,7 +144,7 @@ update_data()
 num_values = 10 # Maximum of data displayed on the graph
 
 df = pd.DataFrame(data_dict)
-
+new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
 subset_df = df.tail(num_values)
 fig = px.line(subset_df, x="Measurement", y="Mass (kTon)", markers=True, template='plotly_dark',
               title="Real-time ore pile mass")
