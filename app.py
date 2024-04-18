@@ -392,7 +392,7 @@ def download_csv():
     update_data()
     # Criar DataFrame a partir do data_dict
     df_download = pd.DataFrame(data_dict)
-    df_download.sort_values(by='Measurement', ascending=True)
+    df_download.sort_values(by='Measurement', ascending=True, inplace = True)
 
     # Criar um objeto BytesIO para armazenar os dados do arquivo CSV
     csv_output = BytesIO()
