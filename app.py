@@ -26,7 +26,6 @@ import os
 from dotenv import load_dotenv
 import time
 import logging
-ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 UPDATE_INTERVAL = 15 * 60 * 1000 # Update time in milisseconds (15 min)
 
@@ -128,13 +127,14 @@ def update_data():
     except Exception as e:
         logging.error(f"Error during data update: {e}")
         
-update_data()
+
 
 num_values = 10 # Maximum of data displayed on the graph
 
 df = pd.DataFrame(data_dict)
 new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
 subset_df = df.tail(num_values)
+update_data()
 
 fig = px.line(subset_df, x="Measurement", y="Mass (kTon)", markers=True, template='plotly_dark',
               title="Real-time ore pile mass")
@@ -260,7 +260,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     # Reconstruir o dataframe a cada atualização
     df = pd.DataFrame(data_dict)
     new_df = df.sort_values(by='Measurement', ascending=True)
-    subset_df = df.tail(num_values)
+    subset_df = new_df.tail(num_values)
     update_data()
 
 
