@@ -25,6 +25,7 @@ import sys
 import os
 from dotenv import load_dotenv
 import time
+import logging
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 UPDATE_INTERVAL = 15 * 60 * 1000 # Update time in milisseconds (15 min)
@@ -42,8 +43,6 @@ def request_from_API(uri):
             payload = data["payload"]
             return payload
 
-            if not data:
-                print("No data available.")
         else:
             logging.error(f"Bad response - Status code: {response.status_code}")
     except Exception as e:
@@ -106,37 +105,28 @@ def get_temperature():
 
 # Update data_dict with current time, temperature, and Mass values
 def update_data():
-    current_time_zero=datetime.now()
-    new_time=current_time_zero
-    
     try:
         payload = request_from_API('?limit=10')
+        if not payload:
+            print("No new data to update.")
+            return
 
         for item in payload:
-            ts   = item["_ts"]
+            ts = item["_ts"]
             time = pd.to_datetime(ts, unit='s', utc=True).tz_convert('America/Sao_Paulo')
-
-            if time in data_dict['Measurement date']:
-                pass
-            else:
-                current_time_zero=datetime.now()
-                new_time=current_time_zero
+            if time not in data_dict['Measurement']:
                 temperature = get_temperature()
-
                 mass = item["instantaneous_mass"]
-                #date = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d')
-                date = time.strftime('%d-%m-%Y')  # Formatar a data como DD-MM-AAAA
-                time_str = time.strftime('%H:%M:%S')  # Formatar a hora como HH:MM:SS
+                date = time.strftime('%d-%m-%Y')
+                time_str = time.strftime('%H:%M:%S')
 
-                # Append new data to the dictionary
                 data_dict['Measurement date'].insert(0, date)
                 data_dict['Measurement time'].insert(0, time_str)
                 data_dict['Mass (kTon)'].insert(0, mass)
                 data_dict['Temperature (°C)'].insert(0, temperature)
                 data_dict['Measurement'].insert(0, time)
-
     except Exception as e:
-        print("An error occurred while fetching data: using old data.")
+        logging.error(f"Error during data update: {e}")
         
 update_data()
 
