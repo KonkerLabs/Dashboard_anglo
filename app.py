@@ -102,7 +102,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 
 # Inicializar o scheduler
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=update_data(), trigger=IntervalTrigger(seconds=60), id='data_update_job', replace_existing=True)
+scheduler.add_job(func=update_data, trigger=IntervalTrigger(seconds=60), id='data_update_job', replace_existing=True)
 scheduler.start()
 
 def get_temperature():
