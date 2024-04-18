@@ -19,7 +19,6 @@ import uuid
 from urllib.parse import quote
 from urllib.parse import urlparse, urlunparse
 from functools import wraps
-
 import requests
 import json
 import sys
@@ -94,8 +93,7 @@ data_dict = {'Measurement date': [],
              'Measurement time': [],
              'Mass (kTon)': [],
              'Temperature (°C)': [],
-             'Measurement': []
-            }
+             'Measurement': []}
 
 # Inicializar o scheduler
 scheduler = BackgroundScheduler()
@@ -268,7 +266,7 @@ def update_data_and_graph(n_intervals, user_full_name):
 
     
     # Atualizar o dataframe e o gráfico com os dados mais recentes
-    new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
+    new_df = pd.DataFrame(data_dict)
     subset_df = df.tail(num_values)
     update_data()
 
@@ -383,21 +381,22 @@ def display_dashboard(value, user_full_name):
 # Add a callback to set initial values for the Dash app layout
 @dash_app.callback(Output('user-full-name', 'children'),
                    [Input('dummy-input', 'value')], prevent_initial_call=True)
-def set_initial_values(value):
-    # Check if the user is authenticated
-    if 'azure_token' not in session or session['azure_token'] is None:
-        return 'User'  # Set a default value for user_full_name if not authenticated
+
+###def set_initial_values(value):
+  ### Check if the user is authenticated
+   ### if 'azure_token' not in session or session['azure_token'] is None:
+    ###    return 'User'  # Set a default value for user_full_name if not authenticated
 
     # Fetch user information using Azure OAuth token
-    user_info = azure.get('me')
-    full_name = user_info.data.get('displayName', 'User')  # Get the user's display name
+    ###user_info = azure.get('me')
+    ###full_name = user_info.data.get('displayName', 'User')  # Get the user's display name
 
-    return full_name
+    ###return full_name
 
 @app.route('/download_csv')
 def download_csv():
     # Criar DataFrame a partir do data_dict
-    df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True).tail(num_values)
+    df = new_df.sort_values(by='Measurement', ascending=True)
 
     # Criar um objeto BytesIO para armazenar os dados do arquivo CSV
     csv_output = BytesIO()
