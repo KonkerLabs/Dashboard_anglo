@@ -257,8 +257,9 @@ def update_data_and_graph(n_intervals, user_full_name):
         return redirect(url_for('login'))
 
     update_data()
-    # Atualizar o dataframe e o gráfico com os dados mais recentes
-    new_df.sort_values(by='Measurement', ascending=True)
+    # Reconstruir o dataframe a cada atualização
+    df = pd.DataFrame(data_dict)
+    new_df = df.sort_values(by='Measurement', ascending=True)
     subset_df = df.tail(num_values)
 
 
