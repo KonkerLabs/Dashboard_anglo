@@ -268,7 +268,7 @@ def update_data_and_graph(n_intervals, user_full_name):
 
     
     # Atualizar o dataframe e o gráfico com os dados mais recentes
-    new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
+    new_df.sort_values(by='Measurement', ascending=True)
     subset_df = df.tail(num_values)
     get_temperature()
     update_data()
@@ -301,7 +301,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     # Altera a cor da linha do gráfico para preto
     new_fig.update_traces(line=dict(color='black'))
 
-    return new_df.to_dict('records').sort_values(by='Measurement', ascending=True), new_fig
+    return new_df.to_dict('records'), new_fig
 
 
 # Inline CSS styles
