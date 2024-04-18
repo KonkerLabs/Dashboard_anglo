@@ -97,7 +97,7 @@ data_dict = {'Measurement date': [],
              'Measurement': []}
 
 # Inicializar o scheduler
-#scheduler = BackgroundScheduler()
+scheduler = BackgroundScheduler()
 
 def get_temperature():
     observation = mgr.weather_at_place("Belo Horizonte,BR")
