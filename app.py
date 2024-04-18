@@ -52,6 +52,7 @@ def request_from_API(uri):
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css', '/static/styles.css']
 pil_img = Image.open("logo-blavk.png")
+
 # Adicione a definição do button_style aqui
 button_style = {
     'margin-top': '20px',
@@ -96,19 +97,18 @@ data_dict = {'Measurement date': [],
              'Measurement': []}
 
 # Inicializar o scheduler
-scheduler = BackgroundScheduler()
+#scheduler = BackgroundScheduler()
 
 def get_temperature():
     observation = mgr.weather_at_place("Belo Horizonte,BR")
     w = observation.weather
     return w.temperature('celsius')['temp']
 
-# Update data_dict with current time, temperature, and random Mass values
+# Update data_dict with current time, temperature, and Mass values
 def update_data():
     current_time_zero=datetime.now()
     new_time=current_time_zero
     
-
     try:
         payload = request_from_API('?limit=10')
 
@@ -145,6 +145,7 @@ num_values = 10 # Maximum of data displayed on the graph
 df = pd.DataFrame(data_dict)
 new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
 subset_df = df.tail(num_values)
+
 fig = px.line(subset_df, x="Measurement", y="Mass (kTon)", markers=True, template='plotly_dark',
               title="Real-time ore pile mass")
 
@@ -220,7 +221,7 @@ dash_app.layout = html.Div(
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
                                 
                             ],
-                            data=new_df.to_dict('records'),
+                            data=new_df.to_dict('records').sort_values(by='Measurement', ascending=True),
                             style_table={'height': 275, 'width': '99%'},
                             style_cell={'textAlign': 'center', 'minWidth': '100px', 'font_size': '18px',
                                         'font_family': 'Arial, sans-serif'},
@@ -267,8 +268,9 @@ def update_data_and_graph(n_intervals, user_full_name):
 
     
     # Atualizar o dataframe e o gráfico com os dados mais recentes
-    new_df = pd.DataFrame(data_dict)
+    new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
     subset_df = df.tail(num_values)
+    get_temperature()
     update_data()
 
     # Atualizar o gráfico com as novas informações
@@ -299,7 +301,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     # Altera a cor da linha do gráfico para preto
     new_fig.update_traces(line=dict(color='black'))
 
-    return new_df.to_dict('records'), new_fig
+    return new_df.to_dict('records').sort_values(by='Measurement', ascending=True), new_fig
 
 
 # Inline CSS styles
