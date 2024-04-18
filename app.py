@@ -390,13 +390,13 @@ def display_dashboard(value, user_full_name):
 @app.route('/download_csv')
 def download_csv():
     # Criar DataFrame a partir do data_dict
-    df_download = new_df.sort_values(by='Measurement', ascending=True)
+    #df_download = new_df.sort_values(by='Measurement', ascending=True)
 
     # Criar um objeto BytesIO para armazenar os dados do arquivo CSV
     csv_output = BytesIO()
 
     # Salvar o DataFrame como um arquivo CSV na memória
-    df_download.to_csv(csv_output, index=False, sep=',')
+    new_df.to_csv(csv_output, index=False, sep=',')
 
     # Definir o ponteiro de leitura para o início do arquivo
     csv_output.seek(0)
