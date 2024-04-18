@@ -276,8 +276,6 @@ def update_data_and_graph(n_intervals, user_full_name):
     new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
     subset_df = new_df.tail(num_values)
 
-    
-    update_data()
 
     # Atualizar o gráfico com as novas informações
     new_fig = px.line(subset_df.tail(num_values),
