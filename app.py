@@ -221,7 +221,7 @@ dash_app.layout = html.Div(
                                 {'name': 'Temperature (°C)', 'id': 'Temperature (°C)'},
                                 
                             ],
-                            data=pd.DataFrame(data_dict).to_dict('records'),
+                            data=new_df.to_dict('records'),
                             style_table={'height': 275, 'width': '99%'},
                             style_cell={'textAlign': 'center', 'minWidth': '100px', 'font_size': '18px',
                                         'font_family': 'Arial, sans-serif'},
@@ -268,7 +268,7 @@ def update_data_and_graph(n_intervals, user_full_name):
 
     update_data()
     # Atualizar o dataframe e o gráfico com os dados mais recentes
-    #new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
+    new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
     subset_df = df.tail(num_values)
     
 
