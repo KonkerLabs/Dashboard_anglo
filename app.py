@@ -28,7 +28,7 @@ from dotenv import load_dotenv
 import time
 
 
-UPDATE_INTERVAL = 15 * 60 * 1000 # Update time in milisseconds (15 min)
+UPDATE_INTERVAL =  60 * 1000 # Update time in milisseconds (15 min)
 
 def request_from_API(uri):
     load_dotenv()
