@@ -256,11 +256,12 @@ def update_data_and_graph(n_intervals, user_full_name):
         # Redirect to the Azure AD login page if not authenticated
         return redirect(url_for('login'))
 
-    update_data()
+    
     # Reconstruir o dataframe a cada atualização
     df = pd.DataFrame(data_dict)
     new_df = df.sort_values(by='Measurement', ascending=True)
     subset_df = df.tail(num_values)
+    update_data()
 
 
     # Atualizar o gráfico com as novas informações
