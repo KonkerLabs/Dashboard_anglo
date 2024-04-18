@@ -26,7 +26,7 @@ import os
 from dotenv import load_dotenv
 import time
 
-
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 UPDATE_INTERVAL = 15 * 60 * 1000 # Update time in milisseconds (15 min)
 
 def request_from_API(uri):
