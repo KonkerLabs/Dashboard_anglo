@@ -29,6 +29,7 @@ import logging
 
 UPDATE_INTERVAL = 15 * 60 * 1000 # Update time in milisseconds (15 min)
 NUM_VALUES_SHOWN = 100
+
 def request_from_API(uri):
     load_dotenv()
     TOKEN = os.environ.get('TOKEN')
@@ -105,7 +106,7 @@ def get_temperature():
 # Update data_dict with current time, temperature, and Mass values
 def update_data():
     try:
-        payload = request_from_API('?limit=10')
+        payload = request_from_API('?limit=100')
         if not payload:
             print("No new data to update.")
             return
