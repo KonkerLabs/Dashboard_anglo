@@ -260,7 +260,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     # Reconstruir o dataframe a cada atualização
     df = pd.DataFrame(data_dict)
     new_df = df.sort_values(by='Measurement', ascending=True)
-    subset_df = new_df.tail(NUM_VALUES_SHOWN)
+    subset_df = new_df.tail(num_values)
     update_data()
 
 
