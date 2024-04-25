@@ -28,7 +28,7 @@ import time
 import logging
 
 UPDATE_INTERVAL = 15 * 60 * 1000 # Update time in milisseconds (15 min)
-
+NUM_VALUES_SHOWN = 100
 def request_from_API(uri):
     load_dotenv()
     TOKEN = os.environ.get('TOKEN')
@@ -129,11 +129,11 @@ def update_data():
         
 
 
-num_values = 10 # Maximum of data displayed on the graph
+num_values = 20 # Maximum of data displayed on the graph
 
 df = pd.DataFrame(data_dict)
 new_df = pd.DataFrame(data_dict).sort_values(by='Measurement', ascending=True)
-subset_df = df.tail(num_values)
+subset_df = df.tail(NUM_VALUES_SHOWN)
 update_data()
 
 fig = px.line(subset_df, x="Measurement", y="Mass (kTon)", markers=True, template='plotly_dark',
@@ -260,7 +260,7 @@ def update_data_and_graph(n_intervals, user_full_name):
     # Reconstruir o dataframe a cada atualização
     df = pd.DataFrame(data_dict)
     new_df = df.sort_values(by='Measurement', ascending=True)
-    subset_df = new_df.tail(num_values)
+    subset_df = new_df.tail(NUM_VALUES_SHOWN)
     update_data()
 
 
@@ -330,7 +330,7 @@ def do_logout():
     # Substitua YOUR_TENANT_ID pelo seu ID de Tenant do Azure AD
     azure_logout_url = (
         f"https://login.microsoftonline.com/YOUR_TENANT_ID/oauth2/logout"
-        f"?post_logout_redirect_uri=http://localhost:5000/page_logout"
+        f"?post_logout_redirect_uri=http://anglo.konker.me/page_logout"
     )
 
     # Redirecionar para a URL de logout do Azure AD
@@ -389,6 +389,8 @@ def display_dashboard(value, user_full_name):
 
 @app.route('/download_csv')
 def download_csv():
+    if 'azure_token' not in session:
+        return redirect(url_for('/'))
     update_data()
     # Criar DataFrame a partir do data_dict
     df_download = pd.DataFrame(data_dict)
