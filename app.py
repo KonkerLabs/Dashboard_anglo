@@ -106,7 +106,7 @@ def get_temperature():
 # Update data_dict with current time, temperature, and Mass values
 def update_data():
     try:
-        payload = request_from_API('?limit=600')
+        payload = request_from_API('?limit=200')
         if not payload:
             print("No new data to update.")
             return
