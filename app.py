@@ -50,7 +50,7 @@ def request_from_API(uri):
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css', '/static/styles.css']
-pil_img = Image.open("logo-blavk.png")
+#pil_img = Image.open("logo-blavk.png")
 
 # Adicione a definição do button_style aqui
 button_style = {
@@ -106,7 +106,7 @@ def get_temperature():
 # Update data_dict with current time, temperature, and Mass values
 def update_data():
     try:
-        payload = request_from_API('?limit=200')
+        payload = request_from_API('?limit=100')
         if not payload:
             print("No new data to update.")
             return
@@ -127,8 +127,6 @@ def update_data():
                 data_dict['Measurement'].insert(0, time)
     except Exception as e:
         logging.error(f"Error during data update: {e}")
-        
-
 
 num_values = 20 # Maximum of data displayed on the graph
 
